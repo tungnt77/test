@@ -13,7 +13,7 @@ import azure.functions as func
 
 # QRADAR info (management ip and authentication token)
 qradar_host = $env:consoleIP
-token = $env:token
+qrtoken = $env:token
 # Sentinel info (tenant, workspace id and workspace key)
 customer_id = $env:customerID 
 shared_key = $env:sharedKey 
@@ -71,8 +71,8 @@ def post_data(customer_id, shared_key, body, log_type):
         print("Response code: {}".format(response.status_code))
 
 def get_offenses():
-    headers = {'Content-Type':'application/json', 'Version':'12.0', 'SEC':'7f85e92b-a1b0-45b8-9c4b-0d6f976a432b'}
-    qradar_host = '20.205.236.179'
+    headers = {'Content-Type':'application/json', 'Version':'12.0', 'SEC':''}
+    headers['SEC'] = qrtoken
     time_filter = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds())
     print(time_filter)
     url = "https://" + qradar_host + "/api/siem/offenses?filter=start_time%3E" + str(time_filter) 
