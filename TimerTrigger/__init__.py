@@ -12,24 +12,24 @@ import azure.functions as func
 
 
 # QRADAR info (management ip and authentication token)
-qradar_host = $env:consoleIP
-qrtoken = $env:token
+qradar_host = os.environ["consoleIP"]
+qrtoken = os.environ["token"]
 # Sentinel info (tenant, workspace id and workspace key)
-customer_id = $env:customerID 
-shared_key = $env:sharedKey 
+customer_id = os.environ["customerID"] 
+shared_key = os.environ["sharedKey"] 
 
 
 # For the shared key, use either the primary or the secondary Connected Sources client authentication key   
 
 
 # The log type is the name of the event that is being submitted
-log_type = $env:log_type
+log_type = os.environ["log_type"]
 
 # The SPN credentials for querying Azure Log Analytics 
 get_offenese_ids_query = "{0}_CL | project id_d".format(log_type)
-tenant = $env:tenant
-sp_id = $env:sp_id
-sp_secret = $env:sp_secret
+tenant = os.environ["tenant"]
+sp_id = os.environ["sp_id"]
+sp_secret = os.environ["sp_secret"]
 # An example JSON web monitor object
 
 
@@ -71,8 +71,7 @@ def post_data(customer_id, shared_key, body, log_type):
         print("Response code: {}".format(response.status_code))
 
 def get_offenses():
-    headers = {'Content-Type':'application/json', 'Version':'12.0', 'SEC':''}
-    headers['SEC'] = qrtoken
+    headers = {'Content-Type':'application/json', 'Version':'12.0', 'SEC':'7f85e92b-a1b0-45b8-9c4b-0d6f976a432b'}
     time_filter = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds())
     print(time_filter)
     url = "https://" + qradar_host + "/api/siem/offenses?filter=start_time%3E" + str(time_filter) 
